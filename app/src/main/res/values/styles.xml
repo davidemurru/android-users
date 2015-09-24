@@ -1,0 +1,21 @@
+<resources>
+
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <!-- Custom theme. -->
+        <item name="colorPrimary">@color/customPrimaryColor</item>
+        <item name="colorPrimaryDark">@color/customPrimaryDarkColor</item>
+        <item name="colorAccent">@color/customAccentColor</item>
+        <item name="android:textColorPrimary">@color/customTextPrimaryColor</item>
+        <item name="android:windowBackground">@color/customWindowBackground</item>
+        <item name="actionMenuTextColor">@color/abc_primary_text_material_dark</item>
+        <item name="android:textColorSecondary">@color/abc_secondary_text_material_dark</item>
+    </style>
+
+    <style name="itemStyle">
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
+    </style>
+
+
+</resources>

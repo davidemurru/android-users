@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">UsersApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_menu_set">SET</string>
+    <string name="message_no_items">No users to show!</string>
+
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="customPrimaryColor">#4CAF50</color>
+    <color name="customPrimaryDarkColor">#388E3C</color>
+    <color name="customAccentColor">#8BC34A</color>
+    <color name="customWindowBackground">#4CAF50</color>
+    <color name="customTextPrimaryColor">#FFFFFF</color>
+    <color name="customTextSecondaryColor">#727272</color>
+    <color name="customTextOptionsColor">#D35400</color>
+
+</resources>
