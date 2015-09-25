@@ -1,4 +1,4 @@
-package me.nootify.users.Service;
+package me.nootify.users.service;
 
 /**
  * API Class

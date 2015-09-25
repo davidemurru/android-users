@@ -7,12 +7,19 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.view.View;
+
+import java.util.concurrent.Callable;
 
 /**
  * Utilities class with static methods.
  */
 public class Utilities {
+
+    public interface showWarningCommand {
+        void execute();
+    }
 
     /*
      * Check network availability.
@@ -129,5 +136,28 @@ public class Utilities {
      */
     final public static boolean hasHoneycombMR1() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1;
+    }
+
+    public static String getUrlRandomPictures(int position) {
+        return "http://lorempixel.com/512/512/people/" + Integer.valueOf((position % 10) + 1);
+    }
+
+    public static void showWarning(final View view, final String message, final Callable<Void> func) {
+
+        Snackbar
+                .make(view, message, Snackbar.LENGTH_LONG)
+                .setAction("RETRY", new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            func.call();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .show();
+
     }
 }

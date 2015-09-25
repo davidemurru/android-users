@@ -1,8 +1,8 @@
-package me.nootify.users.Service;
+package me.nootify.users.service;
 
 import java.util.List;
 
-import me.nootify.users.Data.User;
+import me.nootify.users.data.User;
 
 /**
  * Service class for API response.

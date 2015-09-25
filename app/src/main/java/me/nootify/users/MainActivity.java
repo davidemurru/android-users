@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         void registerObserver(Observer o);
         void removeObserver(Observer o);
         void notifyObservers();
-        void notifySubject(String appTitle);
     }
 
     @Override

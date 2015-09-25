@@ -1,7 +1,6 @@
 package me.nootify.users;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,16 +16,18 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-import me.nootify.users.Data.User;
-import me.nootify.users.Data.UserProvider;
 import me.nootify.users.MainActivity.AsyncCallback;
 import me.nootify.users.MainActivity.Subject;
+import me.nootify.users.UserRecyclerViewAdapter.ActionCommand;
+import me.nootify.users.data.User;
+import me.nootify.users.data.UserProvider;
 
 /**
  * Encapsulates fetching the users and displaying it as a listview layout.
  */
-public class ListFragment extends Fragment implements Subject, SwipeRefreshLayout.OnRefreshListener {
+public class ListFragment extends Fragment implements Subject, ActionCommand, SwipeRefreshLayout.OnRefreshListener {
 
     public interface Observer {
         void update(List data);
@@ -36,6 +37,7 @@ public class ListFragment extends Fragment implements Subject, SwipeRefreshLayou
     private UserRecyclerViewAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<User> users;
+    private UserRecyclerViewAdapter.ActionCommand userCallback;
 
 
     public static Fragment newInstance() {
@@ -76,10 +78,8 @@ public class ListFragment extends Fragment implements Subject, SwipeRefreshLayou
 
     private void setupRecyclerView(View rootView) {
 
-        UserRecyclerViewAdapter.ActionCallback userCallback = new UserActionCallback(this);
-
         // create the adapter for the listView previously created.
-        adapter = new UserRecyclerViewAdapter(getContext(), R.layout.list_item, userCallback);
+        adapter = new UserRecyclerViewAdapter(getContext(), R.layout.list_item);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.listview);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
@@ -89,6 +89,9 @@ public class ListFragment extends Fragment implements Subject, SwipeRefreshLayou
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        adapter.addActionCommand(this);
+        userCallback = new UserActionCallback(getContext(), (Subject) this);
 
         onRefresh();
     }
@@ -118,9 +121,8 @@ public class ListFragment extends Fragment implements Subject, SwipeRefreshLayou
 
                 users = items;
 
-                notifyObservers();
-
                 getActivity().runOnUiThread(new Runnable() {
+
                     @Override
                     public void run() {
 
@@ -129,15 +131,16 @@ public class ListFragment extends Fragment implements Subject, SwipeRefreshLayou
 
                         if (users == null || users.size() == 0) {
 
-                            Snackbar
-                                    .make(getView(), getActivity().getResources().getString(R.string.message_no_items), Snackbar.LENGTH_LONG)
-                                    .setAction("RETRY", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            onRefresh();
-                                        }
-                                    })
-                                    .show();
+                            Utilities.showWarning(getView(), getString(R.string.warning_message_no_items), new Callable<Void>() {
+
+                                @Override
+                                public Void call() {
+
+                                    onRefresh();
+
+                                    return null;
+                                }
+                            });
 
                         } else {
 
@@ -149,6 +152,8 @@ public class ListFragment extends Fragment implements Subject, SwipeRefreshLayou
                         Utilities.showFadeView(getActivity().getApplicationContext(), getView().findViewById(R.id.listview), getView().findViewById(R.id.loaderview));
                     }
                 });
+
+                notifyObservers();
             }
         });
     }
@@ -274,9 +279,11 @@ public class ListFragment extends Fragment implements Subject, SwipeRefreshLayou
     }
 
     @Override
-    public void notifySubject(String sTitle) {
-        adapter.notifyDataSetChanged();
+    public void execute(int index) {
+        userCallback.execute(index);
 
-        setTitleApp(sTitle);
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
     }
+
 }

@@ -2,7 +2,7 @@ package me.nootify.users;
 
 import android.app.Application;
 
-import me.nootify.users.Data.UserProvider;
+import me.nootify.users.data.UserProvider;
 
 /**
  * Created by davide on 23/09/15.

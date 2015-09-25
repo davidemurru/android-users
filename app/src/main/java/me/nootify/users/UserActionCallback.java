@@ -1,31 +1,37 @@
 package me.nootify.users;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.ListView;
 
 import java.util.Collections;
 import java.util.List;
 
-import me.nootify.users.Data.User;
+import me.nootify.users.ListFragment.Observer;
+import me.nootify.users.MainActivity.Subject;
+import me.nootify.users.UserRecyclerViewAdapter.ActionCommand;
+import me.nootify.users.data.User;
 
 /**
  * Created by davide on 24/09/15.
  */
-public class UserActionCallback implements UserRecyclerViewAdapter.ActionCallback, ListFragment.Observer {
+public class UserActionCallback implements ActionCommand, Observer {
 
     private int indexUserSelected = ListView.INVALID_POSITION;
     private List<User> users;
     private Context mContext;
-    private MainActivity.Subject mObservable;
+    private Subject mObservable;
 
 
-    public UserActionCallback(MainActivity.Subject observable) {
+    public UserActionCallback(Context context, MainActivity.Subject observable) {
+        this.mContext = context;
         this.mObservable = observable;
-        this.mObservable.registerObserver(this);
+
+        mObservable.registerObserver(this);
     }
 
     @Override
-    public void onPostExecute(int userId) {
+    public void execute(int userId) {
 
         if (indexUserSelected != ListView.INVALID_POSITION) {
             users.get(indexUserSelected).setSelected(false);
@@ -37,7 +43,7 @@ public class UserActionCallback implements UserRecyclerViewAdapter.ActionCallbac
         User user = users.get(indexUserSelected);
         user.setSelected(true);
 
-        mObservable.notifySubject(user.getName());
+        ((Activity) mContext).setTitle(user.getName());
     }
 
     @Override

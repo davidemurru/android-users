@@ -1,4 +1,4 @@
-package me.nootify.users.Data;
+package me.nootify.users.data;
 
 import java.util.Comparator;
 

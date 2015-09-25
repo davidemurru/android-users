@@ -12,10 +12,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.nootify.users.Data.User;
+import me.nootify.users.data.User;
 
 /**
  * Created by davide on 24/09/15.
@@ -26,19 +27,25 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
      * A callback interface for the ListFragment. This mechanism allows
      * the fragment to be notified of item selections.
      */
-    public interface ActionCallback {
-        void onPostExecute(int index);
+    public interface ActionCommand {
+        void execute(int index);
     }
 
     private Context context;
     private int layout;
     private List<User> items;
-    private ActionCallback actionButtonCallback;
+    private List<ActionCommand> actionsCommand;
 
-    public UserRecyclerViewAdapter(Context context, int layout, ActionCallback actionButtonCallback) {
+    public UserRecyclerViewAdapter(Context context) {
         this.context = context;
+
+        actionsCommand = new ArrayList<>();
+    }
+
+    public UserRecyclerViewAdapter(Context context, int layout) {
+        this(context);
+
         this.layout = layout;
-        this.actionButtonCallback = actionButtonCallback;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         final User user = items.get(position);
 
         Glide.with(holder.avatar.getContext())
-                .load("http://lorempixel.com/512/512/people/" + Integer.valueOf((position % 10) + 1))
+                .load(Utilities.getUrlRandomPictures(position))
                 .fitCenter()
                 .crossFade()
                 .into(holder.avatar);
@@ -60,8 +67,11 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         holder.action.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View view) {
-                actionButtonCallback.onPostExecute(holder.id);
+            public void onClick(final View view) {
+
+                for (ActionCommand actionCommand : actionsCommand) {
+                    actionCommand.execute(holder.id);
+                }
             }
         });
 
@@ -100,6 +110,10 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         }
 
         return l;
+    }
+
+    public void addActionCommand(ActionCommand command){
+        actionsCommand.add(command);
     }
 
 

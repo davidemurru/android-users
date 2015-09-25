@@ -1,4 +1,4 @@
-package me.nootify.users.Data;
+package me.nootify.users.data;
 
 import android.content.Context;
 
@@ -14,9 +14,9 @@ import ly.apps.android.rest.client.RestClientFactory;
 import ly.apps.android.rest.client.RestServiceFactory;
 import me.nootify.users.MainActivity.AsyncCallback;
 import me.nootify.users.R;
-import me.nootify.users.Service.IRestAPI;
-import me.nootify.users.Service.ServiceResponse;
 import me.nootify.users.Utilities;
+import me.nootify.users.service.IRestAPI;
+import me.nootify.users.service.ServiceResponse;
 
 /**
  * Helper Class for retrieve the users data from local storage (DB)
@@ -50,6 +50,7 @@ public class UserProvider {
 
             // we retrieve data from the local storage.
             new Thread(new Runnable() {
+
                 @Override
                 public void run() {
 
