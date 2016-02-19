@@ -6,10 +6,9 @@ import org.junit.Test;
 
 public class InitTest extends TestCase
 {
-
     @Test
     public void test()
     {
-        assertTrue(true);
+        assertTrue(false);
     }
 }
